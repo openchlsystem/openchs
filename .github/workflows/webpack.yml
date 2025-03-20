@@ -15,25 +15,15 @@ jobs:
         node-version: [18.x, 20.x, 22.x]
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install Dependencies
-      run: |
-        npm ci  # Faster than npm install for CI/CD
-        npm install -g webpack webpack-cli  # Ensure Webpack is installed
+    - name: Install dependencies
+      run: npm install  # ✅ Use this instead of `npm ci`
 
-    - name: Build Project
-      run: |
-        CI=false npx webpack
-
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: dist
-        path: dist
+    - name: Build
+      run: npx webpack

@@ -1,4 +1,4 @@
-name: NodeJS with Webpack
+name: Deploy Vite App
 
 on:
   push:
@@ -15,15 +15,24 @@ jobs:
         node-version: [18.x, 20.x, 22.x]
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
+        cache: 'npm'  # Caches npm dependencies for faster builds
 
     - name: Install dependencies
-      run: npm install  # ✅ Use this instead of `npm ci`
+      run: |
+        cd openchs-site  # Ensure you're inside your project folder
+        npm install
 
-    - name: Build
-      run: npx webpack
+    - name: Build Vite Project
+      run: |
+        cd openchs-site
+        npm run build  # Runs Vite build
+
+    - name: Deploy (Optional)
+      run: echo "Add deployment step here"

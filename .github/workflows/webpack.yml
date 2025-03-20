@@ -1,4 +1,4 @@
-name: Deploy Vite App
+name: Deploy Vue 3 App with Vite
 
 on:
   push:
@@ -15,24 +15,28 @@ jobs:
         node-version: [18.x, 20.x, 22.x]
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'  # Caches npm dependencies for faster builds
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: |
-        cd openchs-site  # Ensure you're inside your project folder
-        npm install
+      - name: Change to Project Directory
+        run: cd openchs-site
 
-    - name: Build Vite Project
-      run: |
-        cd openchs-site
-        npm run build  # Runs Vite build
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: openchs-site # Ensures it runs in the right directory
 
-    - name: Deploy (Optional)
-      run: echo "Add deployment step here"
+      - name: Build Project
+        run: npm run build
+        working-directory: openchs-site # Ensures it builds from the correct directory
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: openchs-site/dist # Uploads the built files

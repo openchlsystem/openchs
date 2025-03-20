@@ -18,24 +18,25 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Change to Project Directory
-        run: cd openchs-site
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - name: Verify Repository Structure
+        run: ls -la
 
+      - name: Move into Project Directory
+        run: cd openchs-site && ls -la
 
       - name: Install Dependencies
         run: npm ci
-        working-directory: openchs-site # Ensures it runs in the right directory
+        working-directory: openchs-site # Ensure commands run in the right directory
 
       - name: Build Project
         run: npm run build
-        working-directory: openchs-site # Ensures it builds from the correct directory
+        working-directory: openchs-site
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
